@@ -17,6 +17,7 @@ public class Task1 {
         driver.manage().window().maximize();
     }
     @Test
+
     public void Test(){
         WebElement textArea = driver.findElement(By.id("postform-text"));
         textArea.click();
