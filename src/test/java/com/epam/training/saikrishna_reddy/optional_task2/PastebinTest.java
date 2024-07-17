@@ -1,4 +1,4 @@
-//package com.epam.training.saikrishna_reddy.optional_task2;
+package com.epam.training.saikrishna_reddy.optional_task2;
 //
 //import org.openqa.selenium.By;
 //import org.openqa.selenium.WebDriver;
@@ -81,3 +81,63 @@
 //
 //
 //}
+
+import org.junit.Assert;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class PastebinTest {
+
+    private static WebDriver driver;
+    private static final String text = """
+            git config --global user.name  "New Sheriff in Town"
+            git reset $(git commit-tree HEAD^{tree} -m "Legacy code")
+            git push origin master --force""";
+    private static final String syntaxHiglighting = "Bash" ;
+    private static String expirationTime = "10 Minutes" ;
+    private static final String title = "how to gain dominance among developers" ;
+    private static NextPastebinPage basePage;
+
+    @BeforeClass
+    public static void setup() {
+        driver = new EdgeDriver();
+//      driver = new ChromeDriver();
+        driver.get("https://pastebin.com/");
+        driver.manage().window().maximize();
+        PastebinPage pastebinPage = new PastebinPage(driver);
+        pastebinPage.createPaste(text,syntaxHiglighting,expirationTime,title);
+
+        basePage = new NextPastebinPage(driver);
+
+    }
+
+    @Test
+    public void testTitle(){
+        String actualTitle = basePage.getPageTitle();
+        Assert.assertEquals(actualTitle, title);
+    }
+
+    @Test
+    public void testSyntax(){
+        String actualSyntax = basePage.getSyntax();
+        Assert.assertEquals(actualSyntax, syntaxHiglighting);
+    }
+
+    @Test
+    public void testParagraph(){
+        String actualText = basePage.getParagraph();
+        Assert.assertEquals(actualText, text);
+    }
+
+    @AfterClass
+    public static void close(){
+        driver.close();
+    }
+
+}
+
+
+
